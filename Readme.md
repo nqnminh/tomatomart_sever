@@ -1,4 +1,4 @@
-## BOOK STORE SERVER
+## TOMATO MART SERVER
 
 In the project directory, you can run:
 
