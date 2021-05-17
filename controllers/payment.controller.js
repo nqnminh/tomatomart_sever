@@ -7,6 +7,7 @@ const https = require('https');
 const axios = require('axios');
 module.exports.index = async (req,res) => {
     //parameters send to MoMo get get payUrl
+    
     var endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
     var hostname = "https://test-payment.momo.vn"
     var path = "/gw_payment/transactionProcessor"
@@ -16,7 +17,7 @@ module.exports.index = async (req,res) => {
     var orderInfo = "thanh toan don hang Tomato Mart"
     var returnUrl = "http://localhost:3000"
     var notifyurl = "https://tomato-mart.herokuapp.com/payment/momo_notify"
-    var amount = "1876000"
+    var amount = "1986000"
     var requestType = "captureMoMoWallet"
     var extraData = "username=momo;pass=passwor"
     var rawSignature = "partnerCode=" + partnerCode + "&accessKey=" + accessKey + "&requestId=" + requestId + "&amount=" + amount + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&returnUrl=" + returnUrl + "&notifyUrl=" + notifyurl + "&extraData=" + extraData
