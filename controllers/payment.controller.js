@@ -1,146 +1,48 @@
-// const Order = require('../models/order.model');
+const { v4: uuidv4 } = require('uuid');
+var orderId = uuidv4();
+var requestId = uuidv4();
+const crypto = require('crypto');
 
-// module.exports.createPayment= async (req, res)=>{
-//     const { id, order} = req.body;
-//     console.log("MAAAAAAAAAA",oder);
-//     var ipAddr = req.headers['x-forwarded-for'] ||
-//         req.connection.remoteAddress ||
-//         req.socket.remoteAddress ||
-//         req.connection.socket.remoteAddress;
-
-//     var config = require('config');
-//     var dateFormat = require('dateformat');
-
+const https = require('https');
+const axios = require('axios');
+module.exports.index = async (req,res) => {
+    //parameters send to MoMo get get payUrl
+    var endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor"
+    var hostname = "https://test-payment.momo.vn"
+    var path = "/gw_payment/transactionProcessor"
+    var partnerCode = "MOMO9NYV20210516"
+    var accessKey = "iXGFBRWzmypYCl45"
+    var serectkey = "TkJiyJKrTB7n2Ds9qAHl5EusiuAoE2PA"
+    var orderInfo = "thanh toan don hang Tomato Mart"
+    var returnUrl = "http://localhost:3000"
+    var notifyurl = "https://tomato-mart.herokuapp.com/payment/momo_notify"
+    var amount = "1876000"
+    var requestType = "captureMoMoWallet"
+    var extraData = "username=momo;pass=passwor"
+    var rawSignature = "partnerCode=" + partnerCode + "&accessKey=" + accessKey + "&requestId=" + requestId + "&amount=" + amount + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&returnUrl=" + returnUrl + "&notifyUrl=" + notifyurl + "&extraData=" + extraData
+    var signature = crypto.createHmac('sha256', serectkey)
+        .update(rawSignature)
+        .digest('hex');
+    var body = JSON.stringify({
+        partnerCode: partnerCode,
+        accessKey: accessKey,
+        requestId: requestId,
+        amount: amount,
+        orderId: orderId,
+        orderInfo: orderInfo,
+        returnUrl: returnUrl,
+        notifyUrl: notifyurl,
+        extraData: extraData,
+        requestType: requestType,
+        signature: signature,
+    })
+    var data='';
+    await axios.post('https://test-payment.momo.vn/gw_payment/transactionProcessor',body)
+    .then(res => {
+        data += JSON.stringify(res.data); 
+    })
+    res.send(data);
     
-//     var tmnCode = config.get('vnp_TmnCode');
-//     var secretKey = config.get('vnp_HashSecret');
-//     var vnpUrl = config.get('vnp_Url');
-//     var returnUrl = config.get('vnp_ReturnUrl');
 
-//     var date = new Date();
 
-//     var createDate = dateFormat(date, 'yyyymmddHHmmss');
-//     var orderId = dateFormat(date, 'HHmmss');
-//     var amount = order.totalPrice;
-//     var bankCode = "";
-    
-//     var orderInfo = order.name + order.phone;
-//     var orderType = 100000;
-//     var locale = req.body.language;
-//     if(locale === null || locale === ''){
-//         locale = 'vn';
-//     }
-//     var currCode = 'VND';
-//     var vnp_Params = {};
-//     vnp_Params['vnp_Version'] = '2';
-//     vnp_Params['vnp_Command'] = 'pay';
-//     vnp_Params['vnp_TmnCode'] = tmnCode;
-//     // vnp_Params['vnp_Merchant'] = ''
-//     vnp_Params['vnp_Locale'] = locale;
-//     vnp_Params['vnp_CurrCode'] = currCode;
-//     vnp_Params['vnp_TxnRef'] = orderId;
-//     vnp_Params['vnp_OrderInfo'] = orderInfo;
-//     vnp_Params['vnp_OrderType'] = orderType;
-//     vnp_Params['vnp_Amount'] = amount * 100;
-//     vnp_Params['vnp_ReturnUrl'] = returnUrl;
-//     vnp_Params['vnp_IpAddr'] = ipAddr;
-//     vnp_Params['vnp_CreateDate'] = createDate;
-//     if(bankCode !== null && bankCode !== ''){
-//         vnp_Params['vnp_BankCode'] = bankCode;
-//     }
-
-//     vnp_Params = sortObject(vnp_Params);
-
-//     var querystring = require('qs');
-//     var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
-
-//     var sha256 = require('sha256');
-
-//     var secureHash = sha256(signData);
-
-//     vnp_Params['vnp_SecureHashType'] =  'SHA256';
-//     vnp_Params['vnp_SecureHash'] = secureHash;
-//     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: true });
-
-//     //Neu muon dung Redirect thi dong dong ben duoi
-//     res.status(200).json({code: '00', data: vnpUrl})
-//     //Neu muon dung Redirect thi mo dong ben duoi va dong dong ben tren
-//     res.redirect(vnpUrl)
-// };
-
-// module.exports.vnpayReturn= async (req,res)=>{
-//     console.log("hihih aha");
-//     var vnp_Params = req.query;
-
-//     var secureHash = vnp_Params['vnp_SecureHash'];
-
-//     delete vnp_Params['vnp_SecureHash'];
-//     delete vnp_Params['vnp_SecureHashType'];
-
-//     vnp_Params = sortObject(vnp_Params);
-
-//     var config = require('config');
-//     var tmnCode = config.get('vnp_TmnCode');
-//     var secretKey = config.get('vnp_HashSecret');
-
-//     var querystring = require('qs');
-//     var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
-
-//     var sha256 = require('sha256');
-
-//     var checkSum = sha256(signData);
-
-//     if(secureHash === checkSum){
-//         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
-//         res.render('success', {code: vnp_Params['vnp_ResponseCode']})
-//     } else{
-//         res.render('success', {code: '97'})
-//     }
-// }
-// module.exports.vnpayIpn= async (req,res)=>{
-//     var vnp_Params = req.query;
-//     var secureHash = vnp_Params['vnp_SecureHash'];
-
-//     delete vnp_Params['vnp_SecureHash'];
-//     delete vnp_Params['vnp_SecureHashType'];
-
-//     vnp_Params = sortObject(vnp_Params);
-//     var config = require('config');
-//     var secretKey = config.get('vnp_HashSecret');
-//     var querystring = require('qs');
-//     var signData = secretKey + querystring.stringify(vnp_Params, { encode: false });
-    
-//     var sha256 = require('sha256');
-
-//     var checkSum = sha256(signData);
-
-//     if(secureHash === checkSum){
-//         var orderId = vnp_Params['vnp_TxnRef'];
-//         var rspCode = vnp_Params['vnp_ResponseCode'];
-//         //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
-//         res.status(200).json({RspCode: '00', Message: 'success'})
-//     }
-//     else {
-//         res.status(200).json({RspCode: '97', Message: 'Fail checksum'})
-//     }
-
-// }
-
-// function sortObject(o) {
-//     var sorted = {},
-//         key, a = [];
-
-//     for (key in o) {
-//         if (o.hasOwnProperty(key)) {
-//             a.push(key);
-//         }
-//     }
-
-//     a.sort();
-
-//     for (key = 0; key < a.length; key++) {
-//         sorted[a[key]] = o[a[key]];
-//     }
-//     return sorted;
-// }
+}

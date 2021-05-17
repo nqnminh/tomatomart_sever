@@ -14,7 +14,7 @@ const orders = await Order.find({ userId: req.user._id });
 module.exports.removeAll = async (req, res) => {
   const orders = await Order.deleteMany({});
   try {
-    res.status(200).json("Delete successfully!");
+    res.status(200).json("Xóa thành công!");
   } catch (err) {
     res.status(400).send(err);
   }
