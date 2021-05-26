@@ -10,11 +10,7 @@ const productSchema = new mongoose.Schema({
   slug: String,
   salePrice: Number,
   discountInPercent: Number,
-  type: String,
-  galley: Array,
-
-
-
+  type: String
 });
 
 const Product = mongoose.model('Product', productSchema);
