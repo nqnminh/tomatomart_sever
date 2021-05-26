@@ -27,7 +27,7 @@ module.exports.postCheckout = async (req, res) => {
     date: date,
     orderTime: orderTime,
     status: 1,
-    orderId:order.orderId
+    orderId: order.orderId
   })
 
   try {
@@ -36,4 +36,6 @@ module.exports.postCheckout = async (req, res) => {
   } catch(err) {
     res.status(400).send(err);
   }
+
+  
 }

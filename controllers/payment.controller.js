@@ -1,13 +1,16 @@
 const { v4: uuidv4 } = require('uuid');
 var requestId = uuidv4();
 const crypto = require('crypto');
+const moment = require('moment');
+const Order = require('../models/order.model');
+
 
 const https = require('https');
 const axios = require('axios');
-module.exports.index = async (req,res) => {
-    const {order}=req.body;
+module.exports.index = async (req, res) => {
+    const { order } = req.body;
     const orderData = JSON.stringify(order);
-    var orderId = "" + order.orderId + "" 
+    var orderId = "" + order.orderId + ""
     var partnerCode = "MOMO9NYV20210516"
     var accessKey = "iXGFBRWzmypYCl45"
     var serectkey = "TkJiyJKrTB7n2Ds9qAHl5EusiuAoE2PA"
@@ -16,7 +19,7 @@ module.exports.index = async (req,res) => {
     var notifyurl = "https://tomato-mart.herokuapp.com/payment/momo_notify"
     var amount = "" + order.totalPrice + ""
     var requestType = "captureMoMoWallet"
-    var extraData = ""+ orderData + ""
+    var extraData = "" + orderData + ""
     var rawSignature = "partnerCode=" + partnerCode + "&accessKey=" + accessKey + "&requestId=" + requestId + "&amount=" + amount + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&returnUrl=" + returnUrl + "&notifyUrl=" + notifyurl + "&extraData=" + extraData
     var signature = crypto.createHmac('sha256', serectkey)
         .update(rawSignature)
@@ -34,19 +37,40 @@ module.exports.index = async (req,res) => {
         requestType: requestType,
         signature: signature,
     })
-    var data='';
-    await axios.post('https://test-payment.momo.vn/gw_payment/transactionProcessor',body)
-    .then(res => {
-        data += JSON.stringify(res.data); 
-    })
+    var data = '';
+    await axios.post('https://test-payment.momo.vn/gw_payment/transactionProcessor', body)
+        .then(res => {
+            data += JSON.stringify(res.data);
+        })
     res.send(data);
 }
 
-module.exports.momo_notify= async (req,res) => {
-    const data= req.body;
+module.exports.momo_notify = async (req, res) => {
+    const data = req.body;
     console.log(data);
-    const orderData=JSON.parse(data.extraData);
-    console.log(orderData);
-    console.log(typeof orderData);
-
+    const order = JSON.parse(data.extraData);
+    const date = moment().format('LL');
+    const orderTime = moment().format('LLL');
+    const newOrder = new Order({
+        userId: order.id,
+        userName: order.name,
+        email: order.email,
+        address: order.address,
+        city: order.city,
+        district: order.district,
+        phone: order.phone,
+        cart: order.cartItems,
+        payment: order.payment,
+        totalPrice: order.totalPrice,
+        date: date,
+        orderTime: orderTime,
+        status: 1,
+        orderId: order.orderId
+    })
+    try {
+        const savedOrder = await newOrder.save();
+        res.status(200).json('ok');
+    } catch (err) {
+        res.status(400).send(err);
+    }
 }
