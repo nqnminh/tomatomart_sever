@@ -15,9 +15,9 @@ module.exports.index = async (req,res) => {
     var orderInfo = "thanh toan don hang Tomato Mart"
     var returnUrl = "http://localhost:3000"
     var notifyurl = "https://tomato-mart.herokuapp.com/payment/momo_notify"
-    var amount = order.totalPrice
+    var amount = "" + order.totalPrice + ""
     var requestType = "captureMoMoWallet"
-    var extraData = orderData
+    var extraData = ""+ orderData + ""
     var rawSignature = "partnerCode=" + partnerCode + "&accessKey=" + accessKey + "&requestId=" + requestId + "&amount=" + amount + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&returnUrl=" + returnUrl + "&notifyUrl=" + notifyurl + "&extraData=" + extraData
     var signature = crypto.createHmac('sha256', serectkey)
         .update(rawSignature)
