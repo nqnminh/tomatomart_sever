@@ -5,7 +5,7 @@ const Order = require('../models/order.model');
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 module.exports.index = async (req, res) => {
-  const order = await Order.findById(req.query.id);
+  const order = await Order.find({ orderId: req.query.orderId });
   res.json(order);
 }
 
@@ -26,7 +26,8 @@ module.exports.postCheckout = async (req, res) => {
     totalPrice: order.totalPrice,
     date: date,
     orderTime: orderTime,
-    status: 1
+    status: 1,
+    orderId:order.orderId
   })
 
   try {
@@ -35,6 +36,4 @@ module.exports.postCheckout = async (req, res) => {
   } catch(err) {
     res.status(400).send(err);
   }
-
-  
 }

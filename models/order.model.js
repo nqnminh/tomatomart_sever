@@ -13,7 +13,8 @@ const orderSchema = new mongoose.Schema({
   payment: String,
   date: String,
   orderTime: String,
-  status: Number
+  status: Number,
+  orderId:String
 })
 
 const Order = mongoose.model('Order', orderSchema);

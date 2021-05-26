@@ -1,5 +1,4 @@
 const { v4: uuidv4 } = require('uuid');
-var orderId = uuidv4();
 var requestId = uuidv4();
 const crypto = require('crypto');
 
@@ -8,12 +7,12 @@ const axios = require('axios');
 module.exports.index = async (req,res) => {
     const {order}=req.body;
     const orderData = JSON.stringify(order);
-    
+    var orderId = "" + order.orderId + "" 
     var partnerCode = "MOMO9NYV20210516"
     var accessKey = "iXGFBRWzmypYCl45"
     var serectkey = "TkJiyJKrTB7n2Ds9qAHl5EusiuAoE2PA"
     var orderInfo = "thanh toan don hang Tomato Mart"
-    var returnUrl = "http://localhost:3000"
+    var returnUrl = "http://localhost:3000/order-received"
     var notifyurl = "https://tomato-mart.herokuapp.com/payment/momo_notify"
     var amount = "" + order.totalPrice + ""
     var requestType = "captureMoMoWallet"
