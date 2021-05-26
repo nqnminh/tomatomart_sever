@@ -3,7 +3,6 @@ const Promotion = require('../models/promotion.model');
 module.exports.index = async (req, res) => {
   try {
     const promotions = await Promotion.find();
-    console.log(promotions);
     res.status(200).json(promotions);
   } catch (error) {
     res.status(400).json(error);

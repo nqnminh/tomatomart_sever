@@ -41,7 +41,11 @@ module.exports.index = async (req,res) => {
         data += JSON.stringify(res.data); 
     })
     res.send(data);
-    
+}
 
-
+module.exports.momo_notify= async (req,res) => {
+    const data= req.body;
+    console.log(data);
+    const order=JSON.parse(data);
+    console.log(order);
 }
