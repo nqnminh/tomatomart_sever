@@ -9,7 +9,7 @@ module.exports.index = async (req, res) => {
 
 module.exports.signup = async (req, res) => {
   const emailExist = await User.findOne({ email: req.body.email});
-  if (emailExist) return res.status(400).send('Email already exists.');
+  if (emailExist) return res.status(400).send('Email này đã được đăng kí.');
 
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(req.body.password, salt);
