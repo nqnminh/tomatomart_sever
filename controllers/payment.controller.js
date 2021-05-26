@@ -46,6 +46,8 @@ module.exports.index = async (req,res) => {
 module.exports.momo_notify= async (req,res) => {
     const data= req.body;
     console.log(data);
-    const order=JSON.parse(data);
-    console.log(order);
+    const orderData=JSON.parse(data.extraData);
+    console.log(orderData);
+    console.log(typeof orderData);
+
 }
