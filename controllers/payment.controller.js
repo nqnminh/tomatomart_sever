@@ -47,31 +47,30 @@ module.exports.index = async (req, res) => {
 
 module.exports.momo_notify = async (req, res) => {
     const data = req.body;
-    if(data.resultCode === 0){
-        const order = JSON.parse(data.extraData);
-        const date = moment().format('LL');
-        const orderTime = moment().format('LLL');
-        const newOrder = new Order({
-            userId: order.id,
-            userName: order.name,
-            email: order.email,
-            address: order.address,
-            city: order.city,
-            district: order.district,
-            phone: order.phone,
-            cart: order.cartItems,
-            payment: order.payment,
-            totalPrice: order.totalPrice,
-            date: date,
-            orderTime: orderTime,
-            status: 1,
-            orderId: order.orderId
-        })
-        try {
-            const savedOrder = await newOrder.save();
-            res.status(200).json('ok');
-        } catch (err) {
-            res.status(400).send(err);
-        }
-    }   
+    console.log(data.resultCode);
+    const order = JSON.parse(data.extraData);
+    const date = moment().format('LL');
+    const orderTime = moment().format('LLL');
+    const newOrder = new Order({
+        userId: order.id,
+        userName: order.name,
+        email: order.email,
+        address: order.address,
+        city: order.city,
+        district: order.district,
+        phone: order.phone,
+        cart: order.cartItems,
+        payment: order.payment,
+        totalPrice: order.totalPrice,
+        date: date,
+        orderTime: orderTime,
+        status: 1,
+        orderId: order.orderId
+    })
+    try {
+        const savedOrder = await newOrder.save();
+        res.status(200).json('ok');
+    } catch (err) {
+        res.status(400).send(err);
+    }
 }
