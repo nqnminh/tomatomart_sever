@@ -24,13 +24,13 @@ module.exports.create = async (req, res) => {
 module.exports.login = async (req, res) => {
   const admin = await Admin.findOne({ username: req.body.username });
   if (!admin) {
-    return res.status(400).send('Username is not found.');
+    return res.status(400).send('Tên đăng nhập không tìm thấy.');
   }
 
   const token = jwt.sign({_id: admin._id}, process.env.TOKEN_SECRET);
 
   const validPassword = await bcrypt.compare(req.body.password, admin.password);
-  if (!validPassword) return res.status(400).send('Invalid password');
+  if (!validPassword) return res.status(400).send('Sai mật khẩu');
   res.status(200).json({token: token});
 }
 
@@ -70,7 +70,7 @@ module.exports.deleteProduct = async (req, res) => {
   try {
     const data = req.body;
     const result = await Product.findByIdAndDelete(data._id);
-    res.status(200).send("Delete sunccessfully");
+    res.status(200).send("Xóa thành công");
   } catch (err) {
     res.status(400).send(err);
   }

@@ -26,7 +26,7 @@ module.exports.signup = async (req, res) => {
 
   try {
     const savedUser = await user.save();
-    res.json('successful');
+    res.json('Thành công');
   } catch {
     res.status(400).send(err);
   }

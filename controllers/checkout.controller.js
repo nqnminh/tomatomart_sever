@@ -1,6 +1,6 @@
 const Stripe = require('stripe');
 const moment = require('moment');
-const Order = require('../models/order.model');
+const Order = require('../models/order.model'); 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
