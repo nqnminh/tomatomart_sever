@@ -48,10 +48,11 @@ module.exports.index = async (req, res) => {
 module.exports.momo_notify = async (req, res) => {
     const data = req.body;
     console.log(data.errorCode);
-    if (data.errorCode ===  '0') {
+    if (data.errorCode === '0') {
         const order = JSON.parse(data.extraData);
-        const date = moment().format('LL');
-        const orderTime = moment().format('LLL');
+        moment.locale('vi');
+        const date = moment().format('l');
+        const orderTime = moment().format('lll');
         const newOrder = new Order({
             userId: order.id,
             userName: order.name,

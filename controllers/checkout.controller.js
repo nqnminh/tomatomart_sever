@@ -11,8 +11,9 @@ module.exports.index = async (req, res) => {
 
 module.exports.postCheckout = async (req, res) => {
   const { order } = req.body;
-  const date = moment().format('LL');
-  const orderTime = moment().format('LLL');
+  moment.locale('vi');   
+  const date = moment().format('l');  
+  const orderTime = moment().format('lll');
   const newOrder = new Order({
     userId: order.id,
     userName: order.name,
