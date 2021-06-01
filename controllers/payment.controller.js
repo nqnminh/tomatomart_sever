@@ -15,7 +15,7 @@ module.exports.index = async (req, res) => {
     var accessKey = "iXGFBRWzmypYCl45"
     var serectkey = "TkJiyJKrTB7n2Ds9qAHl5EusiuAoE2PA"
     var orderInfo = "thanh toan don hang Tomato Mart"
-    var returnUrl = "http://localhost:3000/order-received"
+    var returnUrl = "https://tomatomart.netlify.app/order-received"
     var notifyurl = "https://tomato-mart.herokuapp.com/payment/momo_notify"
     var amount = "" + order.totalPrice + ""
     var requestType = "captureMoMoWallet"
