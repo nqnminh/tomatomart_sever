@@ -12,7 +12,8 @@ const orderRoute = require('./routes/order.route');
 const adminRoute = require('./routes/admin.route');
 const promotionRoute = require('./routes/promotion.route');
 const paymentRoute=require('./routes/payment.route');
-const categoryRouter= require('./routes/category.route')
+const categoryRouter= require('./routes/category.route');
+const areaRouter= require('./routes/area.route');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -42,6 +43,7 @@ app.use('/order', orderRoute);
 app.use('/admin', adminRoute);
 app.use('/promotion', promotionRoute);
 app.use('/category', categoryRouter);
+app.use('/area', areaRouter);
 
 app.use('/payment', paymentRoute);
 

@@ -8,7 +8,7 @@ const Product = require('../models/product.model');
 module.exports.create = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(req.body.password, salt);
-  
+
   const admin = new Admin({
     username: req.body.username,
     password: hashPassword
@@ -27,11 +27,11 @@ module.exports.login = async (req, res) => {
     return res.status(400).send('Tên đăng nhập không tìm thấy.');
   }
 
-  const token = jwt.sign({_id: admin._id}, process.env.TOKEN_SECRET);
+  const token = jwt.sign({ _id: admin._id }, process.env.TOKEN_SECRET);
 
   const validPassword = await bcrypt.compare(req.body.password, admin.password);
   if (!validPassword) return res.status(400).send('Sai mật khẩu');
-  res.status(200).json({token: token});
+  res.status(200).json({ token: token });
 }
 
 module.exports.adminGet = async (rea, res) => {
@@ -40,7 +40,7 @@ module.exports.adminGet = async (rea, res) => {
   const products = await Product.find();
   const data = {
     orders,
-    users, 
+    users,
     products
   }
   res.json(data);
@@ -59,11 +59,11 @@ module.exports.updateProduct = async (req, res) => {
 module.exports.addProduct = async (req, res) => {
   try {
     const product = await Product.create(req.body);
-  res.json(product);  
+    res.json(product);
   } catch (error) {
     res.status(400).send(error);
   }
-  
+
 }
 
 module.exports.deleteProduct = async (req, res) => {
