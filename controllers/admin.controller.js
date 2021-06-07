@@ -48,7 +48,18 @@ module.exports.adminGet = async (rea, res) => {
 
 module.exports.updateProduct = async (req, res) => {
   try {
-    const data = req.body;
+    var data;
+    const product = req.body;
+    if(product.salePrice === 0 && product.discountInPercent > 0) {
+        data = {...product, price : product.price*((100-product.discountInPercent)/100)};
+    }
+    else {
+      if (product.salePrice > 0 && product.discountInPercent === 0) {
+        data = {...product, price : product.price/((100-product.discountInPercent)*100)};
+      } else {
+        data = {...product, price: product.price*(100-product.discountInPercent)/(100-product.salePrice)}
+      }
+    }
     const result = await Product.findByIdAndUpdate(data._id, data, { new: true });
     res.status(200).send(result);
   } catch (err) {
