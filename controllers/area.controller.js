@@ -3,7 +3,7 @@ const axios = require('axios');
 
 module.exports.city = async (req, res) => {
   var data = null;
-  await axios.get('https://thongtindoanhnghiep.co/api/city/27')
+  await axios.get('https://thongtindoanhnghiep.co/api/district/86')
     .then(res => {
       data = res.data
     })
