@@ -107,7 +107,7 @@ module.exports.momo_notify = async (req, res) => {
               var mailOptions = {
                 from: '"Tomato Mart" <no-reply@tomatomart.com>',
                 to: order.email,
-                subject: '#Tomato8437598743 - Thông báo đơn đặt hàng thành công từ Tomato Mart',
+                subject: '#' + order.orderId + '- Thông báo đơn đặt hàng thành công từ Tomato Mart',
                 text: 'Cảm ơn bạn đã đặt hàng',
                 template: 'main',
                 context: {
