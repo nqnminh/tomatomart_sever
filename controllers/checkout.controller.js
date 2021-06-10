@@ -38,6 +38,21 @@ module.exports.postCheckout = async (req, res) => {
 
   try {
     const savedOrder = await newOrder.save();
+    const formatNumber = (value) => {
+      value += '';
+      const list = value.split('.');
+      const prefix = list[0].charAt(0) === '-' ? '-' : '';
+      let num = prefix ? list[0].slice(1) : list[0];
+      let result = '';
+      while (num.length > 3) {
+        result = `.${num.slice(-3)}${result}`;
+        num = num.slice(0, num.length - 3);
+      }
+      if (num) {
+        result = num + result;
+      }
+      return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+    }
     //send mail order
     var transport = nodemailer.createTransport({
       host: "smtp.mailtrap.io",
@@ -59,13 +74,13 @@ module.exports.postCheckout = async (req, res) => {
 
     var mailOptions = {
       from: '"Tomato Mart" <no-reply@tomatomart.com>',
-      to: 'user@gmail.com',
+      to: order.email,
       subject: '#Tomato8437598743 - Thông báo đơn đặt hàng thành công từ Tomato Mart',
       text: 'Cảm ơn bạn đã đặt hàng',
       template: 'main',
       context: {
         orderId: order.orderId,
-        totalPrice: order.totalPrice,
+        totalPrice: formatNumber(order.totalPrice),
         address: order.address,
         city: order.city,
         district: order.district,
