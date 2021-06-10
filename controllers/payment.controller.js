@@ -68,23 +68,23 @@ module.exports.momo_notify = async (req, res) => {
             status: 1,
             orderId: order.orderId
         })
+        const formatNumber = (value) => {
+          value += '';
+          const list = value.split('.');
+          const prefix = list[0].charAt(0) === '-' ? '-' : '';
+          let num = prefix ? list[0].slice(1) : list[0];
+          let result = '';
+          while (num.length > 3) {
+            result = `.${num.slice(-3)}${result}`;
+            num = num.slice(0, num.length - 3);
+          }
+          if (num) {
+            result = num + result;
+          }
+          return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+        }
         try {
             const savedOrder = await newOrder.save();
-            const formatNumber = (value) => {
-                value += '';
-                const list = value.split('.');
-                const prefix = list[0].charAt(0) === '-' ? '-' : '';
-                let num = prefix ? list[0].slice(1) : list[0];
-                let result = '';
-                while (num.length > 3) {
-                  result = `.${num.slice(-3)}${result}`;
-                  num = num.slice(0, num.length - 3);
-                }
-                if (num) {
-                  result = num + result;
-                }
-                return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
-              }
               //send mail order
               var transport = nodemailer.createTransport({
                 host: "smtp.mailtrap.io",
